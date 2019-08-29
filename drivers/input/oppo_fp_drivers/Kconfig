@@ -1,0 +1,20 @@
+menuconfig OPPO_FINGERPRINT
+	bool "OPPO fingerprint"
+	depends on SPI_MASTER
+	help
+	  Say Y here to enable OPPO fingerprint support
+
+if OPPO_FINGERPRINT
+
+config OPPO_FINGERPRINT_QCOM
+       default n
+       tristate "Fingerprint base on QCOM"
+
+config OPPO_FINGERPRINT_MTK
+       default n
+       tristate "Fingerprint base on MTK"
+config OPPO_FINGERPRINT_CHIP
+       default 1245
+       tristate "Fingerprint chip"
+
+endif #OPPO_FINGERPRINT

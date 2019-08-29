@@ -1,0 +1,13 @@
+menuconfig OPPO_CHARGER
+	bool "OPPO charging system"
+	depends on I2C
+	select REGMAP_I2C
+	help
+	  Say Y here to enable OPPO charging system support
+
+if OPPO_CHARGER
+config OPPO_STANDARD_BATTERY_CHECK_ADC
+	bool "OPPO Official Standard Battery check by ADC"
+	help
+	  Say Y here to support Official Standard Battery check by ADC
+endif #OPPO_CHARGER
