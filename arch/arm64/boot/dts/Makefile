@@ -26,6 +26,7 @@
 dts-dirs += 18081
 dts-dirs += 18181
 dts-dirs += 18097
+dts-dirs += 18099
 dts-dirs += 18383
 dts-dirs += 18041
 #endif
