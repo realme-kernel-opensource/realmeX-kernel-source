@@ -1,0 +1,605 @@
+/* Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+
+&pm660_0{
+	pm660_charger: qcom,qpnp-smb2 {
+		compatible = "qcom,qpnp-smb2";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		#cooling-cells = <2>;
+
+		qcom,pmic-revid = <&pm660_revid>;
+
+		io-channels = <&pm660_rradc 8>,
+			      <&pm660_rradc 10>,
+			      <&pm660_rradc 3>,
+			      <&pm660_rradc 4>;
+		io-channel-names = "charger_temp",
+				   "charger_temp_max",
+				   "usbin_i",
+				   "usbin_v";
+
+//#ifdef VENDOR_EDIT /* Jianchao.Shi@BSP.CHG.Basic, 2017/01/20, sjc Delete for charging */
+		//qcom,wipower-max-uw = <5000000>;
+//#endif
+
+		dpdm-supply = <&qusb_phy0>;
+
+		qcom,thermal-mitigation
+				= <3000000 2500000 2000000 1500000
+					1000000 500000>;
+//#ifdef VENDOR_EDIT /* Jianchao.Shi@BSP.CHG.Basic, 2017/01/20, sjc Delete for charging */
+		//qcom,auto-recharge-soc;
+//#endif
+//#ifdef VENDOR_EDIT /* Jianchao.Shi@BSP.CHG.Basic, 2016/12/26, sjc Add for charging */
+			//for smb2:
+			qcom,usb-icl-ua = <2000000>;
+			qcom,fcc-max-ua = <2000000>;
+			//qcom,fv-max-uv = <4373000>;
+			qcom,hvdcp-disable;
+			qcom,pm660chg-vadc = <&pm660_vadc>;//chargID
+			qcom,pm660usbtemp-vadc = <&pm660_vadc>;//usb temp
+			//qcom,otg-cl-ua = <2000000>;
+			qcom,float-option = <1>;
+
+			//for oppo chg framework:
+			qcom,input_current_charger_ma = <2000>;
+			qcom,input_current_usb_ma = <500>;
+			qcom,input_current_led_ma = <1200>;
+			qcom,input_current_camera_ma = <1200>;
+			//qcom,input_current_led_ma_overtemp = <900>;
+			//qcom,overtemp_bat_decidegc = <350>;
+			qcom,iterm_disabled = <0>;
+			qcom,iterm_ma = <100>;
+			qcom,recharge-mv = <100>;
+			qcom,batt_capacity_mah = <1800>;
+
+			qcom,removed_bat_decidegc = <190>;  /*<-19C*/
+
+			qcom,cold_bat_decidegc = <30>;  /*-3C~0C*/
+			qcom,temp_cold_vfloat_mv = <4000>;
+			qcom,temp_cold_fastchg_current_ma = <300>;
+
+			qcom,little_cold_bat_decidegc = <0>;	/*0C~5C*/
+			qcom,temp_little_cold_vfloat_mv = <4387>;
+			qcom,temp_little_cold_fastchg_current_ma = <810>;
+
+			qcom,cool_bat_decidegc = <50>;	/*5C~12C*/
+			qcom,temp_cool_vfloat_mv = <4387>;
+			qcom,temp_cool_fastchg_current_ma_high = <810>;
+			qcom,temp_cool_fastchg_current_ma_low = <810>;
+
+			qcom,little_cool_bat_decidegc = <120>;	/*12C~16C*/
+			qcom,temp_little_cool_vfloat_mv = <4387>;
+			qcom,temp_little_cool_fastchg_current_ma = <1000>;
+
+			qcom,normal_bat_decidegc = <160>;	/*16C~45C*/
+			qcom,temp_normal_fastchg_current_ma = <1000>;
+			qcom,temp_normal_vfloat_mv = <4387>;
+
+			qcom,warm_bat_decidegc = <450>;		/*45C~53C*/
+			qcom,temp_warm_vfloat_mv = <4100>;
+			qcom,temp_warm_fastchg_current_ma = <520>;
+
+			qcom,hot_bat_decidegc = <530>;
+
+			qcom,non_standard_vfloat_mv = <3980>;
+			qcom,non_standard_fastchg_current_ma = <256>;
+
+			qcom,short_c_bat_cv_mv = <4350>;
+			qcom,short_c_bat_vfloat_mv = <3800>;
+			qcom,short_c_bat_fastchg_current_ma = <256>;
+
+			qcom,cold_vfloat_sw_limit = <3950>;
+			qcom,little_cold_vfloat_sw_limit = <4350>;
+			qcom,cool_vfloat_sw_limit = <4350>;
+			qcom,little_cool_vfloat_sw_limit = <4350>;
+			qcom,normal_vfloat_sw_limit = <4350>;
+			qcom,warm_vfloat_sw_limit = <4050>;
+			qcom,non_standard_vfloat_sw_limit = <3930>;
+			qcom,short_c_bat_vfloat_sw_limit = <3750>;
+
+			qcom,max_chg_time_sec = <36000>;
+			qcom,charger_hv_thr = <5800>;
+			qcom,charger_lv_thr = <3400>;
+			qcom,vbatt_full_thr = <4460>;
+			qcom,vbatt_hv_thr = <4600>;
+
+			qcom,vfloat_step_mv = <10>;
+			qcom,non_standard_vfloat_over_sw_limit = <3980>;
+			qcom,cold_vfloat_over_sw_limit = <4000>;
+			qcom,little_cold_vfloat_over_sw_limit = <4387>;
+			qcom,cool_vfloat_over_sw_limit = <4387>;
+			qcom,little_cool_vfloat_over_sw_limit = <4387>;
+			qcom,normal_vfloat_over_sw_limit = <4387>;
+			qcom,warm_vfloat_over_sw_limit = <4100>;
+
+			qcom,vbatt_power_off = <3250>;
+			qcom,vbatt_soc_1 = <3300>;
+			qcom,vooc_project = <2>;
+			qcom,vbatt_num = <2>;
+
+			qcom,normal_vterm_hw_inc = <150>;
+			qcom,non_normal_vterm_hw_inc = <18>;
+
+			qcom,overchg_normal_fastchg_ma = <700>;/*16C~35c*/
+			qcom,overchg_temp_warm_decidegc = <350>;
+			qcom,overchg_warm_fastchg_ma = <800>;/*35C~40c*/
+			qcom,overchg_temp_high_decidegc = <400>;
+
+			qcom,overchg_normal_vfloat_sw_limit = <4450>;
+			qcom,overchg_temp_normal_vfloat_mv = <4500>;
+			qcom,overchg_normal_vfloat_over_sw_limit = <4500>;
+
+			qcom,default_iterm_ma = <100>;
+			qcom,default_temp_normal_fastchg_current_ma = <1000>;
+			qcom,default_normal_vfloat_sw_limit = <4350>;
+			qcom,default_temp_normal_vfloat_mv = <4387>;
+			qcom,default_normal_vfloat_over_sw_limit = <4387>;
+
+			//for control:
+			//qcom,suspend_after_full;
+			qcom,check_batt_full_by_sw;
+			qcom,external_gauge;
+			qcom,chg_ctrl_by_lcd;
+			qcom,chg_ctrl_by_camera;
+			qcom,sw_vfloat_over_protect_enable;
+
+			qcom,chargerid_switch-gpio = <&tlmm 44 0x00>;
+			qcom,ship-gpio = <&tlmm 21 0x00>;
+			qcom,ccdetect-gpio = <&tlmm 115 0x00>;
+			//qcom,shortc-gpio = <&tlmm 43 0x00>;
+			//qcom,dischg-gpio = <&pm660l_gpios 7 0x00>;
+			pinctrl-names = "chargerid_switch_active", "chargerid_switch_sleep", "chargerid_switch_default",
+							"ship_active", "ship_sleep",
+							"ccdetect_active", "ccdetect_sleep",
+							"chg_qupv3_se12_2uart_sleep", "chg_qupv3_se12_2uart_default";
+							///"shortc_active";
+							/*"dischg_enable", "dischg_disable",*/
+
+			pinctrl-0 = <&chargerid_switch_active>;
+			pinctrl-1 = <&chargerid_switch_sleep>;
+			pinctrl-2 = <&chargerid_switch_default>;
+			pinctrl-3 = <&ship_active>;
+			pinctrl-4 = <&ship_sleep>;
+			pinctrl-5 = <&ccdetect_active>;
+			pinctrl-6 = <&ccdetect_sleep>;
+			pinctrl-7 = <&chg_qupv3_se12_2uart_sleep>;
+			pinctrl-8 = <&chg_qupv3_se12_2uart_default>;
+			//pinctrl-5 = <&dischg_enable>;
+			//pinctrl-6 = <&dischg_disable>;
+//#endif //VENDOR_EDIT
+		qcom,chgr@1000 {
+			reg = <0x1000 0x100>;
+			interrupts =
+				<0x0 0x10 0x0 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x10 0x1 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x10 0x2 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x10 0x3 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x10 0x4 IRQ_TYPE_EDGE_RISING>;
+
+			interrupt-names = "chg-error",
+					  "chg-state-change",
+					  "step-chg-state-change",
+					  "step-chg-soc-update-fail",
+					  "step-chg-soc-update-request";
+		};
+
+		qcom,otg@1100 {
+			reg = <0x1100 0x100>;
+			interrupts = <0x0 0x11 0x0 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x11 0x1 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x11 0x2 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x11 0x3 IRQ_TYPE_EDGE_BOTH>;
+
+			interrupt-names = "otg-fail",
+					  "otg-overcurrent",
+					  "otg-oc-dis-sw-sts",
+					  "testmode-change-detect";
+		};
+
+		qcom,bat-if@1200 {
+			reg = <0x1200 0x100>;
+			interrupts =
+				<0x0 0x12 0x0 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x12 0x1 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x12 0x2 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x12 0x3 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x12 0x4 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x12 0x5 IRQ_TYPE_EDGE_BOTH>;
+
+			interrupt-names = "bat-temp",
+					  "bat-ocp",
+					  "bat-ov",
+					  "bat-low",
+					  "bat-therm-or-id-missing",
+					  "bat-terminal-missing";
+		};
+
+		qcom,usb-chgpth@1300 {
+			reg = <0x1300 0x100>;
+			interrupts =
+				//#ifndef VENDOR_EDIT /* tongfeng.huang@BSP.CHG.Basic, 2018/08/06,  Modify for SVOOC charging */
+				//<0x0 0x13 0x0 IRQ_TYPE_EDGE_BOTH>,
+				//#endif
+				<0x0 0x13 0x1 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x13 0x2 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x13 0x3 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x13 0x4 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x13 0x5 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x13 0x6 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x13 0x7 IRQ_TYPE_EDGE_RISING>;
+
+			//#ifndef VENDOR_EDIT /* tongfeng.huang@BSP.CHG.Basic, 2018/08/06,  Modify for SVOOC charging */
+			//interrupt-names = "usbin-collapse",
+			//		  "usbin-lt-3p6v",
+			//#else
+			interrupt-names = "usbin-lt-3p6v",
+			//#endif
+					  "usbin-uv",
+					  "usbin-ov",
+					  "usbin-plugin",
+					  "usbin-src-change",
+					  "usbin-icl-change",
+					  "type-c-change";
+		};
+
+		qcom,dc-chgpth@1400 {
+			reg = <0x1400 0x100>;
+			interrupts =
+				<0x0 0x14 0x0 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x14 0x1 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x14 0x2 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x14 0x3 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x14 0x4 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x14 0x5 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x14 0x6 IRQ_TYPE_EDGE_RISING>;
+
+			interrupt-names = "dcin-collapse",
+					  "dcin-lt-3p6v",
+					  "dcin-uv",
+					  "dcin-ov",
+					  "dcin-plugin",
+					  "div2-en-dg",
+					  "dcin-icl-change";
+		};
+
+		qcom,chgr-misc@1600 {
+			reg = <0x1600 0x100>;
+			interrupts =
+				<0x0 0x16 0x0 IRQ_TYPE_EDGE_RISING>,
+				<0x0 0x16 0x1 IRQ_TYPE_EDGE_RISING>,
+				//#ifndef VENDOR_EDIT /* tongfeng.huang@BSP.CHG.Basic, 2018/07/10,  Modify for SVOOC charging */
+				///<0x0 0x16 0x2 IRQ_TYPE_EDGE_BOTH>,
+				///<0x0 0x16 0x3 IRQ_TYPE_EDGE_BOTH>,
+				//#endif
+				<0x0 0x16 0x4 IRQ_TYPE_EDGE_BOTH>,
+				<0x0 0x16 0x5 IRQ_TYPE_EDGE_BOTH>,
+				//#ifdef VENDOR_EDIT /* tongfeng.huang@BSP.CHG.Basic, 2018/08/20,  Modify for SVOOC charging */
+				<0x0 0x16 0x6 IRQ_TYPE_EDGE_FALLING>;
+				//#else
+				//<0x0 0x16 0x6 IRQ_TYPE_EDGE_FALLING>,
+				///<0x0 0x16 0x7 IRQ_TYPE_EDGE_BOTH>;
+				//#endif
+
+			interrupt-names = "wdog-snarl",
+					  "wdog-bark",
+					  //#ifndef VENDOR_EDIT /* tongfeng.huang@BSP.CHG.Basic, 2018/07/10,  Modify for SVOOC charging */
+					  ///"aicl-fail",
+					  ///"aicl-done",
+					  //#endif
+					  "high-duty-cycle",
+					  "input-current-limiting",
+					  //#ifdef VENDOR_EDIT /* tongfeng.huang@BSP.CHG.Basic, 2018/08/20,  Modify for SVOOC charging */
+					  "temperature-change";
+					  //#else
+					  //"temperature-change",
+					  //"switcher-power-ok";
+					  //#endif
+		};
+		smb2_vbus: qcom,smb2-vbus {
+			regulator-name = "smb2-vbus";
+		};
+
+		smb2_vconn: qcom,smb2-vconn {
+			regulator-name = "smb2-vconn";
+		};
+	};
+
+	pm660_rradc: rradc@4500 {
+		compatible = "qcom,rradc";
+		reg = <0x4500 0x100>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		#io-channel-cells = <1>;
+		qcom,pmic-revid = <&pm660_revid>;
+	};
+
+	pm660_fg: qpnp,fg {
+		compatible = "qcom,fg-gen3";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		qcom,pmic-revid = <&pm660_revid>;
+		io-channels = <&pm660_rradc 0>,
+			      <&pm660_rradc 7>;
+		io-channel-names = "rradc_batt_id",
+				   "rradc_die_temp";
+		qcom,rradc-base = <0x4500>;
+		qcom,fg-esr-timer-awake = <64 96>;
+		qcom,fg-esr-timer-asleep = <224 256>;
+		qcom,fg-esr-timer-charging = <0 96>;
+		qcom,cycle-counter-en;
+		qcom,hold-soc-while-full;
+		qcom,fg-auto-recharge-soc;
+		qcom,fg-recharge-soc-thr = <98>;
+//#ifndef VENDOR_EDIT /* Jianchao.Shi@BSP.CHG.Basic, 2018/02/05, sjc Modify for charging */
+		//status = "okay";
+//#else
+		status = "disabled";
+//#endif
+
+		qcom,fg-batt-soc@4000 {
+			status = "okay";
+			reg = <0x4000 0x100>;
+			interrupts = <0x0 0x40 0x0 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x40 0x1 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x40 0x2
+						IRQ_TYPE_EDGE_RISING>,
+				     <0x0 0x40 0x3
+						IRQ_TYPE_EDGE_RISING>,
+				     <0x0 0x40 0x4 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x40 0x5
+						IRQ_TYPE_EDGE_RISING>,
+				     <0x0 0x40 0x6 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x40 0x7 IRQ_TYPE_EDGE_BOTH>;
+			interrupt-names = "soc-update",
+					  "soc-ready",
+					  "bsoc-delta",
+					  "msoc-delta",
+					  "msoc-low",
+					  "msoc-empty",
+					  "msoc-high",
+					  "msoc-full";
+		};
+
+		qcom,fg-batt-info@4100 {
+			status = "okay";
+			reg = <0x4100 0x100>;
+			interrupts = <0x0 0x41 0x0 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x41 0x1 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x41 0x2 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x41 0x3 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x41 0x6 IRQ_TYPE_EDGE_BOTH>;
+			interrupt-names = "vbatt-pred-delta",
+					  "vbatt-low",
+					  "esr-delta",
+					  "batt-missing",
+					  "batt-temp-delta";
+		};
+
+		qcom,fg-memif@4400 {
+			status = "okay";
+			reg = <0x4400 0x100>;
+			interrupts = <0x0 0x44 0x0 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x44 0x1 IRQ_TYPE_EDGE_BOTH>,
+				     <0x0 0x44 0x2 IRQ_TYPE_EDGE_BOTH>;
+			interrupt-names = "ima-rdy",
+					  "mem-xcp",
+					  "dma-grant";
+		};
+	};
+};
+
+&pm660_1 {
+	pm660_haptics: qcom,haptics@c000 {
+		compatible = "qcom,qpnp-haptics";
+		reg = <0xc000 0x100>;
+		interrupts = <0x1 0xc0 0x0 IRQ_TYPE_EDGE_BOTH>,
+			     <0x1 0xc0 0x1 IRQ_TYPE_EDGE_BOTH>;
+		interrupt-names = "hap-sc-irq", "hap-play-irq";
+		qcom,pmic-revid = <&pm660_revid>;
+		qcom,pmic-misc = <&pm660_misc>;
+		qcom,misc-clk-trim-error-reg = <0xf3>;
+		//#ifdef VENDOR_EDIT
+		//Added by wanghao@Bsp.group.Tp for vib min time setting,2018/5/17
+		qcom,actuator-type = <1>;
+		//#endif
+		qcom,play-mode = "direct";
+		qcom,vmax-mv = <3200>;
+		qcom,ilim-ma = <800>;
+		qcom,sc-dbc-cycles = <8>;
+		qcom,wave-play-rate-us = <6667>;
+		qcom,en-brake;
+		qcom,lra-high-z = "opt0";
+		qcom,lra-auto-res-mode = "qwd";
+		qcom,lra-res-cal-period = <4>;
+		//#ifdef VENDOR_EDIT
+		//Added by wanghao@Bsp.group.Tp for vib min time setting,2018/5/17
+		qcom,vib-timemin-ms = <35>;
+		//#endif
+	};
+};
+
+&pm660l_3 {
+	pm660l_wled: qcom,leds@d800 {
+		compatible = "qcom,qpnp-wled";
+		reg = <0xd800 0x100>,
+			<0xd900 0x100>;
+		reg-names = "qpnp-wled-ctrl-base",
+				"qpnp-wled-sink-base";
+		interrupts = <0x3 0xd8 0x1 IRQ_TYPE_EDGE_RISING>;
+		interrupt-names = "ovp-irq";
+		linux,name = "wled";
+		linux,default-trigger = "bkl-trigger";
+		qcom,fdbk-output = "auto";
+		qcom,vref-uv = <127500>;
+		qcom,switch-freq-khz = <800>;
+		qcom,ovp-mv = <29600>;
+		qcom,ilim-ma = <970>;
+		qcom,boost-duty-ns = <26>;
+		qcom,mod-freq-khz = <9600>;
+		qcom,dim-mode = "hybrid";
+		qcom,hyb-thres = <625>;
+		qcom,sync-dly-us = <800>;
+		qcom,fs-curr-ua = <25000>;
+		qcom,cons-sync-write-delay-us = <1000>;
+		qcom,led-strings-list = [00 01 02];
+		qcom,loop-auto-gm-en;
+		qcom,pmic-revid = <&pm660l_revid>;
+		qcom,auto-calibration-enable;
+		status = "ok";
+	};
+
+	pm660l_lcdb: qpnp-lcdb@ec00 {
+		compatible = "qcom,qpnp-lcdb-regulator";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		reg = <0xec00 0x100>;
+		interrupts = <0x3 0xec 0x1 IRQ_TYPE_EDGE_RISING>;
+		interrupt-names = "sc-irq";
+
+		qcom,pmic-revid = <&pm660l_revid>;
+
+		lcdb_ldo_vreg: ldo {
+			label = "ldo";
+			regulator-name = "lcdb_ldo";
+			regulator-min-microvolt = <4000000>;
+			regulator-max-microvolt = <6000000>;
+		};
+
+		lcdb_ncp_vreg: ncp {
+			label = "ncp";
+			regulator-name = "lcdb_ncp";
+			regulator-min-microvolt = <4000000>;
+			regulator-max-microvolt = <6000000>;
+		};
+	};
+
+	pm660a_oledb: qpnp-oledb@e000 {
+	       compatible = "qcom,qpnp-oledb-regulator";
+	       #address-cells = <1>;
+	       #size-cells = <1>;
+	       qcom,pmic-revid = <&pm660l_revid>;
+	       reg = <0xe000 0x100>;
+	       qcom,pbs-client = <&pm660l_pbs>;
+
+	       label = "oledb";
+	       regulator-name = "regulator-oledb";
+	       regulator-min-microvolt = <5000000>;
+	       regulator-max-microvolt = <8100000>;
+
+	       qcom,swire-control;
+	       qcom,ext-pin-control;
+	       status = "disabled";
+	};
+
+	pm660a_labibb: qpnp-labibb-regulator {
+		compatible = "qcom,qpnp-labibb-regulator";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		qcom,pmic-revid = <&pm660l_revid>;
+		qcom,swire-control;
+		status = "disabled";
+
+		ibb_regulator: qcom,ibb@dc00 {
+			reg = <0xdc00 0x100>;
+			reg-names = "ibb_reg";
+			regulator-name = "ibb_reg";
+
+			regulator-min-microvolt = <4000000>;
+			regulator-max-microvolt = <6300000>;
+
+			qcom,qpnp-ibb-min-voltage = <1400000>;
+			qcom,qpnp-ibb-step-size = <100000>;
+			qcom,qpnp-ibb-slew-rate = <2000000>;
+			qcom,qpnp-ibb-init-voltage = <4000000>;
+			qcom,qpnp-ibb-init-amoled-voltage = <4000000>;
+		};
+
+		lab_regulator: qcom,lab@de00 {
+			reg = <0xde00 0x100>;
+			reg-names = "lab";
+			regulator-name = "lab_reg";
+
+			regulator-min-microvolt = <4600000>;
+			regulator-max-microvolt = <6100000>;
+
+			qcom,qpnp-lab-min-voltage = <4600000>;
+			qcom,qpnp-lab-step-size = <100000>;
+			qcom,qpnp-lab-slew-rate = <5000>;
+			qcom,qpnp-lab-init-voltage = <4600000>;
+			qcom,qpnp-lab-init-amoled-voltage = <4600000>;
+
+			qcom,notify-lab-vreg-ok-sts;
+		};
+	};
+};
+
+&pm660_pdphy {
+	vbus-supply = <&smb2_vbus>;
+	vconn-supply = <&smb2_vconn>;
+};
+
+&usb0 {
+	extcon = <&pm660_pdphy>, <&pm660_pdphy>, <&eud>,
+					<&pm660_charger>, <&pm660_charger>;
+	vbus_dwc3-supply = <&smb2_vbus>;
+	qcom,no-vbus-vote-with-type-C;
+};
+
+&thermal_zones {
+	xo-therm-step {
+		trips {
+			batt_trip1: batt-trip1 {
+				temperature = <50000>;
+				hysteresis = <4000>;
+				type = "passive";
+			};
+			batt_trip2: batt-trip2 {
+				temperature = <52000>;
+				hysteresis = <2000>;
+				type = "passive";
+			};
+			batt_trip3: batt-trip3 {
+				temperature = <54000>;
+				hysteresis = <2000>;
+				type = "passive";
+			};
+			batt_trip4: batt-trip4 {
+				temperature = <56000>;
+				hysteresis = <2000>;
+				type = "passive";
+			};
+		};
+
+		cooling-maps {
+			battery_lvl1 {
+				trip = <&batt_trip1>;
+				cooling-device = <&pm660_charger 1 1>;
+			};
+			battery_lvl2 {
+				trip = <&batt_trip2>;
+				cooling-device = <&pm660_charger 2 2>;
+			};
+			battery_lvl3 {
+				trip = <&batt_trip3>;
+				cooling-device = <&pm660_charger 4 4>;
+			};
+			battery_lvl4 {
+				trip = <&batt_trip4>;
+				cooling-device = <&pm660_charger 5 5>;
+			};
+		};
+	};
+};
